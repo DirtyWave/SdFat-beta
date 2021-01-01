@@ -658,7 +658,11 @@ bool SdioCard::begin(SdioConfig sdioConfig) {
   uint8_t status[64];
   if (cardCMD6(0X00FFFFFF, status) && (2 & status[13]) &&
       cardCMD6(0X80FFFFF1, status) && (status[16] & 0XF) == 1) {
-    kHzSdClk = 100000;
+    #if defined(ARDUINO_TEENSY41) 
+    kHzSdClk = 50000;
+    #else   
+    kHzSdClk = 150000;
+    #endif
   } else {
     kHzSdClk = 25000;
   }
